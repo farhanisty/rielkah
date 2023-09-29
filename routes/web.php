@@ -15,13 +15,15 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group(function() {
+    Route::get('/', function () {
+        return view('welcome');
+    });
 });
 
 Route::prefix('auth')->group(function() {
     Route::get('/register', [RegisterController::class, 'index']);
     Route::post('/register', [RegisterController::class, 'register']);
-    Route::get('/login', [LoginController::class, 'index']);
+    Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
     Route::post('/login', [LoginController::class, 'login']);
 });
