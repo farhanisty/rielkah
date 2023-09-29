@@ -8,6 +8,8 @@ class ActivityController extends Controller
 {
   public function index()
   {
-    return view('pages.activity');
+    return view('pages.activity', [
+      'page' => 'activity'
+    ]);
   }
 }
