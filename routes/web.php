@@ -20,16 +20,16 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::middleware('auth')->group(function() {
+    Route::get('/', [HomeController::class, 'index'])->name('home.index');
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/search', [SearchController::class, 'index'])->name('search.index');
-Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
 Route::prefix('auth')->group(function() {
-    Route::get('/register', [RegisterController::class, 'index']);
+    Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
     Route::post('/register', [RegisterController::class, 'register']);
-    Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
+    Route::get('/login', [LoginController::class, 'index'])->name('login.index');
     Route::post('/login', [LoginController::class, 'login']);
 });
