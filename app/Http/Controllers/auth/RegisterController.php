@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(Request $request)
+    public function index()
     {
-        //
+        echo "hello world";
+    }
+    
+    public function register(Request $request)
+    {
+        echo "register ";
     }
 }
