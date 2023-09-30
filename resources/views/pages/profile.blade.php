@@ -3,16 +3,16 @@
 @section('content')
 <div class="container pb-[4rem]">
   <section class="w-full pt-5">
-      <h1 class="text-2xl text-slate-700 font-bold">Farhannivta Ramadhana</h1>
-      <h2 class="text-sm text-slate-600 font-light">@farhannivta</h2>
+      <h1 class="text-2xl text-slate-700 font-bold">{{ $userStats->name }}</h1>
+      <h2 class="text-sm text-slate-600 font-light">{{ '@' . $userStats->username }}</h2>
   </section>
   
   <section class="mt-10 md:mt-5 flex gap-10">
     <div class="w-[160px] h-[160px] bg-red-100 flex justify-center items-center rounded-full">cek</div>
     <ul class="flex flex-col gap-3">
-      <li><h3 class="text-md font-semibold">posts</h3><span class="text-slate-600">20</span></li>
-      <li><h3 class="text-md font-semibold">followers</h3><span class="text-slate-600">136</span></li>
-      <li><h3 class="text-md font-semibold">following</h3><span class="text-slate-600">206</span></li>
+      <li><h3 class="text-md font-semibold">posts</h3><span class="text-slate-600">{{ $userStats->posts }}</span></li>
+      <li><h3 class="text-md font-semibold">followers</h3><span class="text-slate-600">{{ $userStats->followers }}</span></li>
+      <li><h3 class="text-md font-semibold">following</h3><span class="text-slate-600">{{ $userStats->following }}</span></li>
     </ul>
   </section>
 
