@@ -10,5 +10,8 @@
 </head>
 <body>
     @yield('body')
+    
+    @yield('pusher')
 </body>
+  @stack('script')
 </html>
