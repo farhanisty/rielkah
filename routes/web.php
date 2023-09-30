@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function() {
 });
 
 
-Route::prefix('auth')->group(function() {
+Route::prefix('auth')->middleware('must.not.logged')->group(function() {
     Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
     Route::post('/register', [RegisterController::class, 'register']);
     Route::get('/login', [LoginController::class, 'index'])->name('login.index');
