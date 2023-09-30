@@ -8,7 +8,7 @@
   </section>
   
   <section class="mt-10 md:mt-5 flex gap-10">
-    <div class="w-[160px] h-[160px] bg-red-100 flex justify-center items-center rounded-full">cek</div>
+    <img src="{{ asset('assets/no-profile.svg') }}" class="rounded-full border-2 border-slate-200" width="160" height="160" />
     <ul class="flex flex-col gap-3">
       <li><h3 class="text-md font-semibold">posts</h3><span class="text-slate-600">{{ $userStats->posts }}</span></li>
       <li><h3 class="text-md font-semibold">followers</h3><span class="text-slate-600">{{ $userStats->followers }}</span></li>
