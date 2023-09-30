@@ -33,6 +33,6 @@ class ProfileController extends Controller
 
   public function showEdit(Request $request)
   {
-    echo "hello wolrd";
+    return view('pages.edit-profile');
   }
 }
