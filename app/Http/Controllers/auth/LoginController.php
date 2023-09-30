@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -12,11 +14,19 @@ class LoginController extends Controller
      */
     public function index(Request $request)
     {
-        echo "hello world";
+        return view('auth.login');
     }
 
-    public function register()
+    public function login(LoginRequest $request)
     {
-        echo "login";
+        if(Auth::attempt($request->validated())) {
+            $request->session()->regenerate();
+            
+            return redirect()->route('home.index');
+        }
+
+        return back()->withErrors([
+            'failed' => 'Email or password is incorrect'
+        ]);
     }
 }
