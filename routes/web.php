@@ -27,9 +27,13 @@ Route::middleware('auth')->group(function() {
 });
 
 
-Route::prefix('auth')->middleware('must.not.logged')->group(function() {
-    Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
-    Route::post('/register', [RegisterController::class, 'register']);
-    Route::get('/login', [LoginController::class, 'index'])->name('login.index');
-    Route::post('/login', [LoginController::class, 'login']);
+Route::prefix('auth')->group(function() {
+    Route::middleware('must.not.logged')->group(function() {
+        Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
+        Route::post('/register', [RegisterController::class, 'register']);
+        Route::get('/login', [LoginController::class, 'index'])->name('login.index');
+        Route::post('/login', [LoginController::class, 'login']);
+    });
+    
+    Route::get('/logout', [LoginController::class, 'logout'])->middleware(['auth'])->name('logout');
 });
