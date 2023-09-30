@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
     Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'showEdit'])->name('profile.edit');
 });
 
 

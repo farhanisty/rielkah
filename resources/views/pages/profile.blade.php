@@ -17,7 +17,7 @@
   </section>
 
   <section class="mt-10">
-    <a class="inline-block py-2 md:px-10 bg-blue-400 border border-blue-400 text-white text-sm w-full text-center rounded-md hover:bg-blue-500" href="https://youtube.com">Edit Profile</a>
+    <a class="inline-block py-2 md:px-10 bg-blue-400 border border-blue-400 text-white text-sm w-full text-center rounded-md hover:bg-blue-500" href="{{ route('profile.edit') }}">Edit Profile</a>
     <button id="logout-button" class="inline-block py-2 mt-3 bg-slate-100 w-full rounded-md text-center text-sm border border-red-200 hover:bg-slate-200">logout</button>
   </section>
 

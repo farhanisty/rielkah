@@ -30,4 +30,9 @@ class ProfileController extends Controller
       'userStats' => $userStats,
     ]);
   }
+
+  public function showEdit(Request $request)
+  {
+    echo "hello wolrd";
+  }
 }
