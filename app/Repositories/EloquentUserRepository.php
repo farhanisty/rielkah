@@ -15,7 +15,7 @@ class EloquentUserRepository implements UserRepository
 {
   public function getWithStatsWhereId(int $id): UserStatsDto
   {
-    $user = User::select('users.name', 'users.username', 'followers.follower', 'followed.followed')
+    $user = User::select('users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed')
       ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
         $join->on('users.id', '=', 'followers.followed_id');
       })
@@ -29,19 +29,19 @@ class EloquentUserRepository implements UserRepository
       throw new Exception("Not Found");
     }
     
-    return new UserStatsDto($user->name, $user->username, 0, $user->follower ?? 0, $user->followed ?? 0);
+    return new UserStatsDto($user->name, $user->username, $user->profile_picture, 0, $user->follower ?? 0, $user->followed ?? 0);
   }
 
   public function getRecentlyAccountBox(): Collection
   {
-    $accounts = User::select('username', 'name')
+    $accounts = User::select('username', 'name', 'profile_picture')
       ->orderByDesc('created_at')
       ->where('id', "!=", auth()->id())
       ->limit(10)
       ->get();
 
     $accountsBox = $accounts->map(function($item, int $key) {
-      return new SearchBoxAccount('', $item->username, $item->name, false);
+      return new SearchBoxAccount($item->profile_picture, $item->username, $item->name, false);
     });
 
     return $accountsBox;

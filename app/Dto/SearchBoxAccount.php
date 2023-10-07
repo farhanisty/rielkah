@@ -5,7 +5,7 @@ namespace App\Dto;
 class SearchBoxAccount
 {
   public function __construct(
-    public string $photoProfileUrl,
+    public string $profilePicture,
     public string $username,
     public string $name,
     public bool $isFollow
