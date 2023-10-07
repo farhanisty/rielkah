@@ -32,11 +32,18 @@ class EloquentUserRepository implements UserRepository
     return new UserStatsDto($user->name, $user->username, $user->profile_picture, 0, $user->follower ?? 0, $user->followed ?? 0);
   }
 
-  public function getRecentlyAccountBox(): Collection
+  public function getRecentlyAccountBox(string $param = null): Collection
   {
     $accounts = User::select('username', 'name', 'profile_picture')
       ->orderByDesc('created_at')
-      ->where('id', "!=", auth()->id())
+      ->where('id', "!=", auth()->id());
+    
+    if($param) {
+      $accounts->where('username', 'like', '%' . $param . '%');
+      $accounts->orWhere('email', 'like', '%' . $param . '%');
+    }
+
+    $accounts = $accounts
       ->limit(10)
       ->get();
 

@@ -11,5 +11,5 @@ interface UserRepository
 {
   public function getWithStatsWhereId(int $id): UserStatsDto;
 
-  public function getRecentlyAccountBox(): Collection;
+  public function getRecentlyAccountBox(string $param = null): Collection;
 }

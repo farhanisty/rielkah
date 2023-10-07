@@ -14,10 +14,14 @@ class SearchController extends Controller
     $this->userRepository = $userRepository;
   }
   
-  public function index()
+  public function index(Request $request)
   {
-    $accountBoxs = $this->userRepository->getRecentlyAccountBox();
-    
+    if($searchInput = $request->input('search')) {
+      $accountBoxs = $this->userRepository->getRecentlyAccountBox($searchInput);
+    }else {
+      $accountBoxs = $this->userRepository->getRecentlyAccountBox();
+    }
+
     return view('pages.search', [
       'page' => 'search',
       'accounts' => $accountBoxs

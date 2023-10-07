@@ -8,7 +8,7 @@
 
   <section class="w-full pt-3 md:pt-8 border-b border-slate-200 pb-5">
       <form class="flex gap-2">
-        <input class="bg-slate-200 p-2 flex-grow rounded focus:outline-none text-slate-700" placeholder="search account..." type="text" />
+        <input class="bg-slate-200 p-2 flex-grow rounded focus:outline-none text-slate-700" placeholder="search account..." type="text" name="search" />
       </form>
   </section>
 
