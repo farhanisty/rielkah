@@ -3,9 +3,11 @@
 namespace App\Repositories;
 
 use App\Dto\UserStatsDto;
+use App\Dto\SearchBoxAccount;
 use App\Models\User;
 use App\Models\FollowManagement;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 
@@ -28,6 +30,21 @@ class EloquentUserRepository implements UserRepository
     }
     
     return new UserStatsDto($user->name, $user->username, 0, $user->follower ?? 0, $user->followed ?? 0);
+  }
+
+  public function getRecentlyAccountBox(): Collection
+  {
+    $accounts = User::select('username', 'name')
+      ->orderByDesc('created_at')
+      ->where('id', "!=", auth()->id())
+      ->limit(10)
+      ->get();
+
+    $accountsBox = $accounts->map(function($item, int $key) {
+      return new SearchBoxAccount('', $item->username, $item->name, false);
+    });
+
+    return $accountsBox;
   }
 
   private function createFollowersTable()

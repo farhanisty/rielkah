@@ -13,17 +13,9 @@
   </section>
 
   <section class="py-3">
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
-    @include('components.search-box-account')
+    @foreach($accounts as $accountBox)
+      @include('components.search-box-account')
+    @endforeach
   </section>
 </div>
 @endsection
