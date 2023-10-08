@@ -20,7 +20,7 @@ class AccountServiceImpl implements AccountService
 
   public function unfollow(int $userId, int $followedId): void
   {
-    echo "hello world";
+    $this->followManagementRepository->delete($userId, $followedId);
   }
 
   public function isFollow(int $userId, int $followedId): bool

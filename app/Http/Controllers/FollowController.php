@@ -18,8 +18,10 @@ class FollowController extends Controller
     return back();
   }
 
-  public function unfollow()
+  public function unfollow(int $id)
   {
-    
+    $this->accountService->unfollow(auth()->id(), $id);
+
+    return back();
   }
 }
