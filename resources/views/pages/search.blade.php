@@ -13,9 +13,22 @@
   </section>
 
   <section class="py-3">
-    @foreach($accounts as $accountBox)
-      @include('components.search-box-account')
-    @endforeach
+    @if(count($accounts) > 0)
+      @if($isSearch)
+        <h1 class="text-sm italic pb-4">Result for '<span class="font-semibold">{{ $searchInput }}</span>'</h1>
+      @endif
+
+      @foreach($accounts as $accountBox)
+        @include('components.search-box-account')
+      @endforeach
+      
+    @else
+      <div class="flex justify-center items-center flex-col pt-10">
+        <h1 class="text-md italic pb-4 text-center"><span class="font-semibold">'{{ $searchInput }}</span>' account is not found</h1>
+        <a class="bg-red-400 hover:bg-red-500 text-white py-1 px-4 rounded mx-auto" href="{{ route('search.index') }}">Go back</a>
+      </div>
+    @endif
+
   </section>
 </div>
 @endsection

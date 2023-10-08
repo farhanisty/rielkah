@@ -16,14 +16,20 @@ class SearchController extends Controller
   
   public function index(Request $request)
   {
-    if($searchInput = $request->input('search')) {
+    $isSearch = false;
+    $searchInput = $request->input('search') ?? null;
+    
+    if($searchInput) {
       $accountBoxs = $this->userRepository->getRecentlyAccountBox($searchInput);
+      $isSearch = true;
     }else {
       $accountBoxs = $this->userRepository->getRecentlyAccountBox();
     }
 
     return view('pages.search', [
       'page' => 'search',
+      'isSearch' => $isSearch,
+      'searchInput' => $searchInput,
       'accounts' => $accountBoxs
     ]);
   }
