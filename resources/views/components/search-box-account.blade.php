@@ -8,5 +8,5 @@
     <h2 class="font-light text-sm">{{ $accountBox->name }}</h2>
     </div>
   </div>
-      <a href="{{ route($accountBox->isFollow ? 'unfollow' : 'follow', $accountBox->id) }}" class="{{ $accountBox->isFollow ? 'bg-slate-200 text-black' : 'text-white bg-blue-400' }} w-[100px] text-center py-1 border rounded">{{ $accountBox->isFollow ? 'unfollow' : 'follow'}}</a>
+      <a href="{{ route($accountBox->isFollow ? 'unfollow' : 'follow', $accountBox->id) }}" class="{{ $accountBox->isFollow ? 'bg-slate-200 text-black hover:bg-slate-300' : 'text-white bg-blue-400 hover:bg-blue-500' }} w-[100px] text-center py-1 border rounded">{{ $accountBox->isFollow ? 'unfollow' : 'follow'}}</a>
 </div>
