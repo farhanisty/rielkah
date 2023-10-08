@@ -10,9 +10,12 @@ class FollowController extends Controller
   public function __construct(
     private AccountService $accountService
   ) {}
+  
   public function follow(int $id)
   {
-    echo $id;
+    $this->accountService->follow(auth()->id(), $id);
+
+    return back();
   }
 
   public function unfollow()

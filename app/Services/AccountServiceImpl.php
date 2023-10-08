@@ -13,17 +13,17 @@ class AccountServiceImpl implements AccountService
     $this->followManagementRepository = $followManagementRepository;
   }
   
-  public function follow(int $id): void
+  public function follow(int $userId, int $followedId): void
+  {
+    $this->followManagementRepository->insert($userId, $followedId);
+  }
+
+  public function unfollow(int $userId, int $followedId): void
   {
     echo "hello world";
   }
 
-  public function unfollow(int $id): void
-  {
-    echo "hello world";
-  }
-
-  public function isFollow(int $id): bool
+  public function isFollow(int $userId, int $followedId): bool
   {
     return true;
   }

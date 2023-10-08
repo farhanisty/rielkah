@@ -11,8 +11,6 @@
     @if($accountBox->isFollow)
       <button type="submit" class="bg-slate-200 px-5 py-1 border text-black rounded">followed</button>
     @else
-      <form method="post" action="follow/{{ $accountBox->id }}">
-        <button type="submit" class="bg-blue-400 px-5 py-1 border text-white rounded">follow</button>
-      </form>
+        <a href="{{ route('follow', $accountBox->id) }}" class="block bg-blue-400 px-5 py-1 border text-white rounded">follow</a>
     @endif
 </div>
