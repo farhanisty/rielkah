@@ -34,7 +34,7 @@ class EloquentUserRepository implements UserRepository
 
   public function getRecentlyAccountBox(string $param = null): Collection
   {
-    $accounts = User::select('username', 'name', 'profile_picture')
+    $accounts = User::select('id', 'username', 'name', 'profile_picture')
       ->orderByDesc('created_at')
       ->where('id', "!=", auth()->id());
     
@@ -48,7 +48,7 @@ class EloquentUserRepository implements UserRepository
       ->get();
 
     $accountsBox = $accounts->map(function($item, int $key) {
-      return new SearchBoxAccount($item->profile_picture, $item->username, $item->name, false);
+      return new SearchBoxAccount($item->id, $item->profile_picture, $item->username, $item->name, false);
     });
 
     return $accountsBox;

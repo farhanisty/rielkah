@@ -4,14 +4,14 @@
   <img src="{{ $accountBox->profilePicture ? asset('assets/' . $accountBox->profilePicture) : asset('assets/no-profile.svg') }}" width="50" />
   </div>
   <div>
-    <h1 class="font-semibold">{{ $accountBox->username }}</h1>
+    <a href="{{ route('home.index') }}" class="font-semibold">{{ $accountBox->username }}</a>
     <h2 class="font-light text-sm">{{ $accountBox->name }}</h2>
     </div>
   </div>
     @if($accountBox->isFollow)
       <button type="submit" class="bg-slate-200 px-5 py-1 border text-black rounded">followed</button>
     @else
-      <form method="post" action="follow/farhannivta_23">
+      <form method="post" action="follow/{{ $accountBox->id }}">
         <button type="submit" class="bg-blue-400 px-5 py-1 border text-white rounded">follow</button>
       </form>
     @endif
