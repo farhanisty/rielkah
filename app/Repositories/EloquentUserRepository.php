@@ -34,9 +34,15 @@ class EloquentUserRepository implements UserRepository
 
   public function getRecentlyAccountBox(string $param = null): Collection
   {
-    $accounts = User::select('id', 'username', 'name', 'profile_picture')
-      ->orderByDesc('created_at')
-      ->where('id', "!=", auth()->id());
+    $followManagements = FollowManagement::select()
+      ->where('user_id', '=', auth()->id());
+    
+    $accounts = User::select('users.id', 'users.username', 'users.name', 'users.profile_picture', DB::raw('follow_management.followed_id is_follow'))
+      ->leftJoinSub($followManagements, 'follow_management', function(JoinClause $join) {
+        $join->on('users.id', '=', 'follow_management.followed_id');
+      })->orderByDesc('users.created_at')
+      ->where('users.id', "!=", auth()->id());
+
     
     if($param) {
       $accounts->where('username', 'like', '%' . $param . '%');
@@ -48,7 +54,7 @@ class EloquentUserRepository implements UserRepository
       ->get();
 
     $accountsBox = $accounts->map(function($item, int $key) {
-      return new SearchBoxAccount($item->id, $item->profile_picture, $item->username, $item->name, false);
+      return new SearchBoxAccount($item->id, $item->profile_picture, $item->username, $item->name, ($item->is_follow !== null) ? true : false);
     });
 
     return $accountsBox;
