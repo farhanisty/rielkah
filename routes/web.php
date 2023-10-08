@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/edit', [ProfileController::class, 'showEdit'])->name('profile.edit');
 
     Route::get('/follow/{id}', [FollowController::class, 'follow'])->name('follow');
+    Route::get('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');
 });
 
 

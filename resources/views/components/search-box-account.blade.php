@@ -8,9 +8,5 @@
     <h2 class="font-light text-sm">{{ $accountBox->name }}</h2>
     </div>
   </div>
-    @if($accountBox->isFollow)
-      <button type="submit" class="bg-slate-200 px-5 py-1 border text-black rounded">followed</button>
-    @else
-        <a href="{{ route('follow', $accountBox->id) }}" class="block bg-blue-400 px-5 py-1 border text-white rounded">follow</a>
-    @endif
+      <a href="{{ route($accountBox->isFollow ? 'unfollow' : 'follow', $accountBox->id) }}" class="{{ $accountBox->isFollow ? 'bg-slate-200 text-black' : 'text-white bg-blue-400' }} w-[100px] text-center py-1 border rounded">{{ $accountBox->isFollow ? 'unfollow' : 'follow'}}</a>
 </div>
