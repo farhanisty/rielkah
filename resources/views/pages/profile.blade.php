@@ -8,7 +8,9 @@
   </section>
   
   <section class="mt-10 md:mt-5 flex gap-10">
-    <img src="{{ asset('assets/no-profile.svg') }}" class="rounded-full border-2 border-slate-200" width="160" height="160" />
+    <div class="rounded-full border-2 border-slate-200 overflow-hidden w-[160px] h-[160px] flex justify-center items-center">
+      <img src="{{ $userStats->profilePicture ? asset('assets/' . $userStats->profilePicture) : asset('assets/no-profile.svg') }}" class="" width="160" />
+    </div>
     <ul class="flex flex-col gap-3">
       <li><h3 class="text-md font-semibold">posts</h3><span class="text-slate-600">{{ $userStats->posts }}</span></li>
       <li><h3 class="text-md font-semibold">followers</h3><span class="text-slate-600">{{ $userStats->followers }}</span></li>
