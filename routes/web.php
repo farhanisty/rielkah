@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'showEdit'])->name('profile.edit');
+    Route::post('/profile/edit', [ProfileController::class, 'postEdit'])->name('profile.post.edit');
 
     Route::get('/follow/{id}', [FollowController::class, 'follow'])->name('follow');
     Route::get('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');
