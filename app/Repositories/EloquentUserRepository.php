@@ -47,7 +47,6 @@ class EloquentUserRepository implements UserRepository
     
     if($param) {
       $accounts->where('username', 'like', '%' . $param . '%');
-      $accounts->orWhere('email', 'like', '%' . $param . '%');
     }
 
     $accounts = $accounts
