@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Dto\EditableUser;
 use App\Dto\UserStatsDto;
 use App\Dto\SearchBoxAccount;
 use App\Models\User;
@@ -58,6 +59,24 @@ class EloquentUserRepository implements UserRepository
     });
 
     return $accountsBox;
+  }
+
+  public function getEditableUser(int $id): EditableUser
+  {
+    $user = User::select("name", "profile_picture")
+      ->where('id', '=', $id)
+      ->first();
+
+    return new EditableUser($user->name, $user->profile_picture);
+  }
+
+  public function editUser(int $id, EditableUser $user): void
+  {
+    User::where('id', $id)
+      ->update([
+        'name' => $user->name,
+        'profile_picture' => $user->profilePicture
+      ]);
   }
 
   private function createFollowersTable()
