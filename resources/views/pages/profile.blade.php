@@ -21,6 +21,8 @@
   <section class="mt-10">
     <a class="inline-block py-2 md:px-10 bg-blue-400 border border-blue-400 text-white text-sm w-full text-center rounded-md hover:bg-blue-500" href="{{ route('profile.edit') }}">Edit Profile</a>
     <button id="logout-button" class="inline-block py-2 mt-3 bg-slate-100 w-full rounded-md text-center text-sm border border-red-200 hover:bg-slate-200">logout</button>
+    
+    <a class="text-sm inline-block mt-10 py-2 hover:text-white hover:bg-blue-400 w-full text-center text-blue-400 px-5 border border-blue-400 rounded-md" href="{{ route('post.index') }}">Create Post</a>
   </section>
 
   <section class="border-t-2 border-slate-200 mt-10">
