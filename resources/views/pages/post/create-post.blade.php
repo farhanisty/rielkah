@@ -3,7 +3,7 @@
 @section('body')
 
 <div class="container py-5">
-  <h1 class="font-semibold text-2xl uppercase mb-8">Create Post</h1>
+  <h1 class="font-bold text-3xl uppercase mb-8">Create Post</h1>
 
   <div class="m-auto flex justify-center items-center w-[350px] border-2 border-black overflow-hidden h-[350px]">
     <h1 id="notification-image" class="text-xl text-slate-600 font-bold">Insert Your Image</h1>

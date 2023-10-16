@@ -4,20 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
+use App\Repositories\PostRepository;
 use App\Http\Requests\EditProfileRequest;
 use App\Dto\EditableUser;
 
 class ProfileController extends Controller
 {
   private UserRepository $userRepository;
+  private PostRepository $postRepository;
   
-  public function __construct(UserRepository $userRepository)
+  public function __construct(UserRepository $userRepository, PostRepository $postRepository)
   {
     $this->userRepository = $userRepository;
+    $this->postRepository = $postRepository;
   }
   
   public function index(Request $request)
   {
+    $posts = $this->postRepository->getPostsWhereId(auth()->id());
     $userStats = $this->userRepository->getWithStatsWhereId(auth()->id());
 
     $view = $request->input('view');
@@ -30,6 +34,7 @@ class ProfileController extends Controller
       'page' => 'profile',
       'view' => $view,
       'userStats' => $userStats,
+      'posts' => $posts
     ]);
   }
 

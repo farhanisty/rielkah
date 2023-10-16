@@ -31,6 +31,21 @@
       <li class="cursor-pointer {{ ($view == 'sort') ? 'pb-3 border-b-2 border-slate-300' : '' }}"><a href="?view=sort"><img src="{{ asset('assets/icons/sort.png') }}" alt="grid" height="25" width="27" /></a></li>
     </ul>
   </section>
+
+  @if(count($posts))
+    @if($view === 'sort')
+    <section class="mt-8 flex flex-col gap-y-3">
+      @foreach($posts as $post)
+        @include('components.post-box')
+      @endforeach
+    </section>
+    @else
+      <p>grid view</p>
+    @endif
+  @else
+    <p class="text-center pt-20 font-bold">You Haven't create any post</p>
+  @endif
+
 </div>
 @endsection
 
