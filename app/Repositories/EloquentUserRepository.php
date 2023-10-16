@@ -6,6 +6,7 @@ use App\Dto\EditableUser;
 use App\Dto\UserStatsDto;
 use App\Dto\SearchBoxAccount;
 use App\Models\User;
+use App\Models\Post;
 use App\Models\FollowManagement;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -16,12 +17,15 @@ class EloquentUserRepository implements UserRepository
 {
   public function getWithStatsWhereId(int $id): UserStatsDto
   {
-    $user = User::select('users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed')
+    $user = User::select('users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed', 'posts.total_posts')
       ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
         $join->on('users.id', '=', 'followers.followed_id');
       })
       ->leftJoinSub($this->createFollowedTable(), 'followed', function(JoinClause $join) {
         $join->on('users.id', '=', 'followed.user_id');
+      })
+      ->leftJoinSub($this->createPostTable(), 'posts', function(JoinClause $join) {
+        $join->on('users.id', '=', 'posts.user_id');
       })
       ->where('users.id', "=", $id)
       ->first();
@@ -29,8 +33,8 @@ class EloquentUserRepository implements UserRepository
     if(!$user) {
       throw new Exception("Not Found");
     }
-    
-    return new UserStatsDto($user->name, $user->username, $user->profile_picture, 0, $user->follower ?? 0, $user->followed ?? 0);
+
+    return new UserStatsDto($user->name, $user->username, $user->profile_picture, $user->total_posts, $user->follower ?? 0, $user->followed ?? 0);
   }
 
   public function getRecentlyAccountBox(string $param = null): Collection
@@ -88,5 +92,11 @@ class EloquentUserRepository implements UserRepository
   {
     return FollowManagement::select('user_id', DB::raw('count(followed_id) as followed'))
       ->groupBy('user_id');
+  }
+
+  private function createPostTable()
+  {
+    return Post::select('user_id', DB::raw('count(id) as total_posts'))
+      ->groupby('user_id');
   }
 }
