@@ -33,7 +33,10 @@ Route::middleware('auth')->group(function() {
     Route::get('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');
 
     Route::get('/post', [PostController::class, 'index'])->name('post.index');
+    Route::get('/post/{id}', [PostController::class, 'show'])->name('post.show');
     Route::post('/post', [PostController::class, 'create'])->name('post.create');
+
+    Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile.show');
 });
 
 

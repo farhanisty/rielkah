@@ -4,7 +4,7 @@
     <img src="{{ $accountBox->profilePicture ? asset('storage/' . $accountBox->profilePicture) : asset('assets/no-profile.svg') }}" width="50" />
   </div>
   <div>
-    <a href="{{ route('home.index') }}" class="font-semibold">{{ $accountBox->username }}</a>
+    <a href="{{ route('profile.show', $accountBox->username) }}" class="font-semibold">{{ $accountBox->username }}</a>
     <h2 class="font-light text-sm">{{ $accountBox->name }}</h2>
     </div>
   </div>

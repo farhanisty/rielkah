@@ -11,6 +11,8 @@ use App\Dto\EditableUser;
 interface UserRepository
 {
   public function getWithStatsWhereId(int $id): UserStatsDto;
+  
+  public function getWithStatsWhereUsername(string $username): UserStatsDto;
 
   public function getRecentlyAccountBox(string $param = null): Collection;
 

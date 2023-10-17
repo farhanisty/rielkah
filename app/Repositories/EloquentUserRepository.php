@@ -31,10 +31,32 @@ class EloquentUserRepository implements UserRepository
       ->first();
 
     if(!$user) {
-      throw new Exception("Not Found");
+      throw new \Exception("Not Found");
     }
 
-    return new UserStatsDto($user->name, $user->username, $user->profile_picture, $user->total_posts, $user->follower ?? 0, $user->followed ?? 0);
+    return new UserStatsDto($user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
+  }
+  
+  public function getWithStatsWhereUsername(string $username): UserStatsDto
+  {
+    $user = User::select('users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed', 'posts.total_posts')
+      ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
+        $join->on('users.id', '=', 'followers.followed_id');
+      })
+      ->leftJoinSub($this->createFollowedTable(), 'followed', function(JoinClause $join) {
+        $join->on('users.id', '=', 'followed.user_id');
+      })
+      ->leftJoinSub($this->createPostTable(), 'posts', function(JoinClause $join) {
+        $join->on('users.id', '=', 'posts.user_id');
+      })
+      ->where('users.username', "=", $username)
+      ->first();
+
+    if(!$user) {
+      throw new \Exception("Not Found");
+    }
+
+    return new UserStatsDto($user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
   }
 
   public function getRecentlyAccountBox(string $param = null): Collection

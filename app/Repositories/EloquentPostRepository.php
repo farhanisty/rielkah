@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Dto\PostDto;
+use App\Dto\PostWithcomments;
 use App\Repositories\PostRepository;
 use App\Models\User;
 use App\Models\Post;
@@ -22,7 +23,12 @@ class EloquentPostRepository implements PostRepository
     ]);
   }
 
-  public function getPostsWhereId(int $id): Collection
+  public function getPostWhereId(int $id): PostWithComments
+  {
+    return new PostWithComments('1', 'farhannivta, ', 'ngawur.png', 'a', 'b', 't', collect([]));
+  }
+
+  public function getPostsWhereUserId(int $id): Collection
   {
     $userPosts = User::select('username', 'profile_picture', DB::raw('posts.id, posts.caption, posts.created_at, posts.image'))
       ->join('posts', 'users.id', '=', 'posts.user_id')
@@ -31,7 +37,22 @@ class EloquentPostRepository implements PostRepository
       ->get();
 
     $posts = $userPosts->map(function($post, int $key) {
-      return new PostDto($post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans());
+      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans());
+    });
+
+    return $posts;
+  }
+
+  public function getPostsWhereUsername(string $username): Collection
+  {
+    $userPosts = User::select('username', 'profile_picture', DB::raw('posts.id, posts.caption, posts.created_at, posts.image'))
+      ->join('posts', 'users.id', '=', 'posts.user_id')
+      ->where('users.username', '=', $username)
+      ->orderByRaw('posts.created_at desc')
+      ->get();
+
+    $posts = $userPosts->map(function($post, int $key) {
+      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans());
     });
 
 

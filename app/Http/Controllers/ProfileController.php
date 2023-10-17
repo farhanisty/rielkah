@@ -21,7 +21,7 @@ class ProfileController extends Controller
   
   public function index(Request $request)
   {
-    $posts = $this->postRepository->getPostsWhereId(auth()->id());
+    $posts = $this->postRepository->getPostsWhereUserId(auth()->id());
     $userStats = $this->userRepository->getWithStatsWhereId(auth()->id());
 
     $view = $request->input('view');
@@ -61,5 +61,26 @@ class ProfileController extends Controller
     $this->userRepository->editUser(auth()->id(), new EditableUser($request->validated('name'), $filename));
 
     return redirect()->route('profile.index');
+  }
+
+  public function show(Request $request, string $username) 
+  {
+    $view = $request->input('view');
+    $view = $view !== "sort" ? "grid" : "sort";
+    
+    try{
+      $userStats = $this->userRepository->getWithStatsWhereUsername($username);
+      $posts = $this->postRepository->getPostsWhereUsername($username);
+
+      return view('pages.profile.show-profile', [
+        'isOwnAccount' => false,
+        'userStats' => $userStats,
+        'view' => $view,
+        'posts' => $posts,
+        'page' => null
+      ]);
+    } catch(\Exception $exception) {
+      return redirect()->route('home.index');
+    }
   }
 }
