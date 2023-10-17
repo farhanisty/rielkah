@@ -6,6 +6,7 @@
   <header>
     <a href="{{ $previousUrl }}" class="underline">Back</a>
     <div class="">
+@dd($post)
       <div class="">
         <img src="{{ $post->profilePicture }}" />
       </div>

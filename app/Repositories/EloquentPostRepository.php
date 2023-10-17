@@ -25,7 +25,12 @@ class EloquentPostRepository implements PostRepository
 
   public function getPostWhereId(int $id): PostWithComments
   {
-    return new PostWithComments('1', 'farhannivta, ', 'ngawur.png', 'a', 'b', 't', collect([]));
+    $post = Post::select('posts.id', 'caption', 'posts.created_at', 'image', DB::raw('users.username, users.profile_picture'))
+      ->join('users', 'users.id', '=', 'posts.user_id')
+      ->where('posts.id', '=', $id)
+      ->first();
+
+    return new PostWithComments($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans(), collect($post->comments));
   }
 
   public function getPostsWhereUserId(int $id): Collection
