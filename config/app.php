@@ -171,6 +171,7 @@ return [
         App\Providers\UserRepositoryProvider::class,
         App\Providers\FollowManagementRepositoryProvider::class,
         App\Providers\AccountServiceProvider::class,
+        App\Providers\CommentRepositoryProvider::class,
         App\Providers\PostRepositoryProvider::class,
     ])->toArray(),
 
