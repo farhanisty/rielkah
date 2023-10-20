@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class EloquentCommentRepository implements CommentRepository
 {
+  public function create(int $postId, int $userId, string $description, string $createdAt, ?bool $replyId = null): void
+  {
+    Comment::insert([
+      'post_id' => $postId,
+      'user_id' => $userId,
+      'description' => $description,
+      'created_at' => $createdAt,
+      'reply_id' => $replyId,
+    ]);
+  }
+  
   public function getCommentsWherePostId(int $id): Collection
   {
     $comments = Comment::select('comments.id',  'user_id', 'post_id', 'description','comments.created_at', 'reply_id', DB::raw('users.username'))
