@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Dto\PostDto;
 use App\Dto\PostWithcomments;
 use App\Repositories\PostRepository;
+use App\Repositories\CommentRepository;
 use App\Models\User;
 use App\Models\Post;
 use Carbon\Carbon;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class EloquentPostRepository implements PostRepository
 {
+  public function __construct(
+    private CommentRepository $commentRepository
+  ) { }
+  
   public function createPost(int $userId, string $image, string $caption, string $createdAt): void
   {
     Post::insert([
@@ -30,7 +35,9 @@ class EloquentPostRepository implements PostRepository
       ->where('posts.id', '=', $id)
       ->first();
 
-    return new PostWithComments($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans(), collect($post->comments));
+    $comments = $this->commentRepository->getCommentsWherePostId($id);
+
+    return new PostWithComments($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans(), $comments);
   }
 
   public function getPostsWhereUserId(int $id): Collection
