@@ -18,6 +18,8 @@ class CommentController extends Controller
 
         $this->commentRepository->create($validated["post_id"], auth()->id(), $validated["description"], now(), $validated["reply_id"] ?? null);
 
+        $request->session()->flash('status', 'Succesfully add comment');
+        
         return redirect()->back();
     }
 
