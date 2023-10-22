@@ -9,7 +9,7 @@
       <p class="font-bold capitalize">back</p>
     </a>
     <div class="flex gap-3 items-center mt-5">
-      <div class="rounded-full overflow-hidden w-[30px] h-[30px] justify-center items-center">
+      <div class="rounded-full overflow-hidden w-[30px] h-[30px] flex justify-center items-center">
         <img src="{{ asset('storage/' . $post->profilePicture) }}" width="30" />
       </div>
       <h1 class="font-semibold">{{ $post->username }}</h1>
