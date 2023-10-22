@@ -5,7 +5,7 @@
     @include('components.user-statistic')
 
     <section class="my-5">
-      <a href="" class="w-full py-2 bg-blue-400 inline-block text-white text-center rounded-md">Follow</a>
+      <a href="{{ route(($userStats->isFollow) ? 'unfollow' : 'follow', $userStats->id) }}" class="w-full py-2 {{ $userStats->isFollow ? 'bg-slate-200 text-black hover:bg-slate-300' : 'bg-blue-400 hover:bg-blue-500 text-white' }} inline-block text-center rounded-md">{{ !$userStats->isFollow ? 'follow' : 'unfollow' }}</a>
     </section>
 
     @include('components.posts-profile')

@@ -72,6 +72,8 @@ class ProfileController extends Controller
       $userStats = $this->userRepository->getWithStatsWhereUsername($username);
       $posts = $this->postRepository->getPostsWhereUsername($username);
 
+      $userStats->isFollow = $this->userRepository->isFollow(auth()->id(), $userStats->id);
+
       return view('pages.profile.show-profile', [
         'isOwnAccount' => false,
         'userStats' => $userStats,

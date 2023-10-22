@@ -16,6 +16,8 @@ interface UserRepository
 
   public function getRecentlyAccountBox(string $param = null): Collection;
 
+  public function isFollow(int $userId, int $followedId): bool;
+  
   public function getEditableUser(int $id): EditableUser;
 
   public function editUser(int $id, EditableUser $user): void;

@@ -17,16 +17,7 @@ class EloquentUserRepository implements UserRepository
 {
   public function getWithStatsWhereId(int $id): UserStatsDto
   {
-    $user = User::select('users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed', 'posts.total_posts')
-      ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
-        $join->on('users.id', '=', 'followers.followed_id');
-      })
-      ->leftJoinSub($this->createFollowedTable(), 'followed', function(JoinClause $join) {
-        $join->on('users.id', '=', 'followed.user_id');
-      })
-      ->leftJoinSub($this->createPostTable(), 'posts', function(JoinClause $join) {
-        $join->on('users.id', '=', 'posts.user_id');
-      })
+    $user = $this->rawSelectUserStats()
       ->where('users.id', "=", $id)
       ->first();
 
@@ -34,21 +25,12 @@ class EloquentUserRepository implements UserRepository
       throw new \Exception("Not Found");
     }
 
-    return new UserStatsDto($user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
+    return new UserStatsDto($user->id, $user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
   }
   
   public function getWithStatsWhereUsername(string $username): UserStatsDto
   {
-    $user = User::select('users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed', 'posts.total_posts')
-      ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
-        $join->on('users.id', '=', 'followers.followed_id');
-      })
-      ->leftJoinSub($this->createFollowedTable(), 'followed', function(JoinClause $join) {
-        $join->on('users.id', '=', 'followed.user_id');
-      })
-      ->leftJoinSub($this->createPostTable(), 'posts', function(JoinClause $join) {
-        $join->on('users.id', '=', 'posts.user_id');
-      })
+    $user = $this->rawSelectUserStats()
       ->where('users.username', "=", $username)
       ->first();
 
@@ -56,7 +38,7 @@ class EloquentUserRepository implements UserRepository
       throw new \Exception("Not Found");
     }
 
-    return new UserStatsDto($user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
+    return new UserStatsDto($user->id, $user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
   }
 
   public function getRecentlyAccountBox(string $param = null): Collection
@@ -102,6 +84,27 @@ class EloquentUserRepository implements UserRepository
         'name' => $user->name,
         'profile_picture' => $user->profilePicture
       ]);
+  }
+
+  public function isFollow(int $userId, int $followedId): bool
+  {
+    return FollowManagement::where('user_id', '=', $userId)
+      ->where('followed_id', '=', $followedId)
+      ->count();
+  }
+  
+  private function rawSelectUserStats()
+  {
+    return User::select('users.id', 'users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed', 'posts.total_posts')
+      ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
+        $join->on('users.id', '=', 'followers.followed_id');
+      })
+      ->leftJoinSub($this->createFollowedTable(), 'followed', function(JoinClause $join) {
+        $join->on('users.id', '=', 'followed.user_id');
+      })
+      ->leftJoinSub($this->createPostTable(), 'posts', function(JoinClause $join) {
+        $join->on('users.id', '=', 'posts.user_id');
+      });
   }
 
   private function createFollowersTable()
