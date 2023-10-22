@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function(Blueprint $table) {
-            $table->string('profile_picture', 100)
-                  ->after('username')
-                  ->nullable();
+        Schema::table('comments', function(Blueprint $table) {
+            $table->unsignedBigInteger('reply_id')->nullable();
+            $table->foreign('reply_id')->references('id')->on('comments');
         });
     }
 
@@ -23,8 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function(Blueprint $table) {
-            $table->dropColumn('profile_picture');
-        });
+        //
     }
 };

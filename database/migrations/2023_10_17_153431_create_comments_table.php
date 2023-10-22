@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function(Blueprint $table) {
-            $table->string('profile_picture', 100)
-                  ->after('username')
-                  ->nullable();
+        Schema::create('comments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('post_id');
+            $table->foreignId('user_id');
+            $table->mediumText('description');
+            $table->timestamps();
         });
     }
 
@@ -23,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function(Blueprint $table) {
-            $table->dropColumn('profile_picture');
-        });
+        Schema::dropIfExists('comments');
     }
 };

@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterPostRequest extends FormRequest
+class CreatePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +21,9 @@ class RegisterPostRequest extends FormRequest
      */
     public function rules(): array
     {
-        Validator::extend('without_spaces', function($attr, $value){
-            return preg_match('/^\S*$/u', $value);
-        });
-        
         return [
-            'name' => 'required|min:4',
-            'username' => 'required|unique:users|min:6|max:32|lowercase|without_spaces',
-            'email' => 'required|unique:users|email',
-            'password' => 'required|min:6'
+            'image' => 'required|image|max:2048',
+            'description' => 'required|min:1|max:512',
         ];
     }
 }

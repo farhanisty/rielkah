@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Dto\EditableUser;
 use App\Dto\UserStatsDto;
 use App\Dto\SearchBoxAccount;
 use App\Models\User;
+use App\Models\Post;
 use App\Models\FollowManagement;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -15,21 +17,28 @@ class EloquentUserRepository implements UserRepository
 {
   public function getWithStatsWhereId(int $id): UserStatsDto
   {
-    $user = User::select('users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed')
-      ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
-        $join->on('users.id', '=', 'followers.followed_id');
-      })
-      ->leftJoinSub($this->createFollowedTable(), 'followed', function(JoinClause $join) {
-        $join->on('users.id', '=', 'followed.user_id');
-      })
+    $user = $this->rawSelectUserStats()
       ->where('users.id', "=", $id)
       ->first();
 
     if(!$user) {
-      throw new Exception("Not Found");
+      throw new \Exception("Not Found");
     }
-    
-    return new UserStatsDto($user->name, $user->username, $user->profile_picture, 0, $user->follower ?? 0, $user->followed ?? 0);
+
+    return new UserStatsDto($user->id, $user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
+  }
+  
+  public function getWithStatsWhereUsername(string $username): UserStatsDto
+  {
+    $user = $this->rawSelectUserStats()
+      ->where('users.username', "=", $username)
+      ->first();
+
+    if(!$user) {
+      throw new \Exception("Not Found");
+    }
+
+    return new UserStatsDto($user->id, $user->name, $user->username, $user->profile_picture, $user->total_posts ?? 0, $user->follower ?? 0, $user->followed ?? 0);
   }
 
   public function getRecentlyAccountBox(string $param = null): Collection
@@ -46,7 +55,6 @@ class EloquentUserRepository implements UserRepository
     
     if($param) {
       $accounts->where('username', 'like', '%' . $param . '%');
-      $accounts->orWhere('email', 'like', '%' . $param . '%');
     }
 
     $accounts = $accounts
@@ -60,6 +68,45 @@ class EloquentUserRepository implements UserRepository
     return $accountsBox;
   }
 
+  public function getEditableUser(int $id): EditableUser
+  {
+    $user = User::select("name", "profile_picture")
+      ->where('id', '=', $id)
+      ->first();
+
+    return new EditableUser($user->name, $user->profile_picture);
+  }
+
+  public function editUser(int $id, EditableUser $user): void
+  {
+    User::where('id', $id)
+      ->update([
+        'name' => $user->name,
+        'profile_picture' => $user->profilePicture
+      ]);
+  }
+
+  public function isFollow(int $userId, int $followedId): bool
+  {
+    return FollowManagement::where('user_id', '=', $userId)
+      ->where('followed_id', '=', $followedId)
+      ->count();
+  }
+  
+  private function rawSelectUserStats()
+  {
+    return User::select('users.id', 'users.name', 'users.username', 'users.profile_picture','followers.follower', 'followed.followed', 'posts.total_posts')
+      ->leftJoinSub($this->createFollowersTable(), 'followers', function(JoinClause $join) {
+        $join->on('users.id', '=', 'followers.followed_id');
+      })
+      ->leftJoinSub($this->createFollowedTable(), 'followed', function(JoinClause $join) {
+        $join->on('users.id', '=', 'followed.user_id');
+      })
+      ->leftJoinSub($this->createPostTable(), 'posts', function(JoinClause $join) {
+        $join->on('users.id', '=', 'posts.user_id');
+      });
+  }
+
   private function createFollowersTable()
   {
     return FollowManagement::select('followed_id', DB::raw('count(user_id) as follower'))
@@ -70,5 +117,11 @@ class EloquentUserRepository implements UserRepository
   {
     return FollowManagement::select('user_id', DB::raw('count(followed_id) as followed'))
       ->groupBy('user_id');
+  }
+
+  private function createPostTable()
+  {
+    return Post::select('user_id', DB::raw('count(id) as total_posts'))
+      ->groupby('user_id');
   }
 }

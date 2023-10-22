@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,9 +28,18 @@ Route::middleware('auth')->group(function() {
     Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'showEdit'])->name('profile.edit');
+    Route::post('/profile/edit', [ProfileController::class, 'postEdit'])->name('profile.post.edit');
 
     Route::get('/follow/{id}', [FollowController::class, 'follow'])->name('follow');
     Route::get('/unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');
+
+    Route::get('/post', [PostController::class, 'index'])->name('post.index');
+    Route::get('/post/{id}', [PostController::class, 'show'])->name('post.show');
+    Route::post('/post', [PostController::class, 'create'])->name('post.create');
+
+    Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile.show');
+
+    Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('comment.store');
 });
 
 
