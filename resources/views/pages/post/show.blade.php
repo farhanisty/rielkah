@@ -2,7 +2,7 @@
 
 @section('body')
 
-<div class="container mt-5">
+<div class="container mt-5 pb-[80px]">
   <header class="mb-3">
     <a href="{{ $previousUrl }}" class="flex items-center gap-2">
       <img src="{{ asset('assets/icons/back.png') }}" width="30" />
@@ -37,13 +37,14 @@
   </section>
 </div>
 
-  <section class="fixed bottom-0 w-full flex justify-center pb-2">
+  <section class="fixed bottom-0 w-full bg-white flex justify-center pb-2">
     <div class="container">
       <div class="border-t-2 pt-3">
         <form method="post" action="{{ route('comment.store', $post->id) }}">
           @csrf
           <div class="relative">
-            <input type="text" class="relative border-2 h-[60px] w-full inline-block pl-2 pr-16 text-slate-600 rounded focus:outline-none" placeholder="write comment here"/>
+            <input type="hidden" name="post_id" value="{{ $post->id }}" />
+            <input type="text" name="description" class="relative border-2 h-[60px] w-full inline-block pl-2 pr-16 text-slate-600 rounded focus:outline-none" placeholder="write comment here"/>
             <div class="absolute right-2 top-0 h-full flex items-center">
               <button type="submit" class="p-1 border-2 border-blue-400 rounded hover:bg-blue-400"><img class="hover:invert hover:sepia hover:saturate-0 hover:hue-rotate[2deg] hover:contrast[104%]" style="filter: brightness(0) saturate(100%) invert(67%) sepia(28%) saturate(6404%) hue-rotate(192deg) brightness(102%) contrast(105%);" src="{{ asset('assets/icons/send.png') }}" width="30" alt="send comment"/></button>
             </div>
