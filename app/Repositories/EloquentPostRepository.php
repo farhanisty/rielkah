@@ -8,6 +8,7 @@ use App\Repositories\PostRepository;
 use App\Repositories\CommentRepository;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\FollowManagement;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,23 @@ class EloquentPostRepository implements PostRepository
       'caption' => $caption,
       'created_at' => $createdAt
     ]);
+  }
+  
+  public function getPostsWhereFollowed(int $id): Collection
+  {
+    $results = FollowManagement::select('posts.id', 'caption', 'posts.created_at', 'image', DB::raw('users.username, users.profile_picture'))
+      ->join('posts', 'posts.user_id', '=', 'follow_management.followed_id')
+      ->join('users', 'posts.user_id', '=', 'users.id')
+      ->where('follow_management.user_id', '=', $id)
+      ->orderByRaw('posts.created_at desc')
+      ->limit(50)
+      ->get();
+
+    $posts = $results->map(function($post, int $key){
+      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans());
+    });
+
+    return collect($posts);
   }
 
   public function getPostWhereId(int $id): PostWithComments
