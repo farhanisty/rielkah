@@ -11,15 +11,18 @@
     <div class="flex justify-between items-center mt-5">
       <div class="flex gap-3 items-center">
         <div class="rounded-full overflow-hidden w-[30px] h-[30px] flex justify-center items-center">
-          <img src="{{ asset('storage/' . $post->profilePicture) }}" width="30" />
+          <img src="{{ asset($post->profilePicture ? 'storage/' . $post->profilePicture : 'assets/no-profile.svg') }}" width="30" />
         </div>
         <h1 class="font-semibold">{{ $post->username }}</h1>
       </div>
-      <button id="delete-post-button"><img class="" width="25"  src="{{ asset('assets/icons/delete.png') }}" /></button>
 
-      <form id="delete-form" class="hidden" method="post" action="{{ route('post.destroy', $post->id) }}">
-        @csrf
-      </form>
+      @if($post->userId == auth()->id())
+        <button id="delete-post-button"><img class="" width="25"  src="{{ asset('assets/icons/delete.png') }}" /></button>
+
+        <form id="delete-form" class="hidden" method="post" action="{{ route('post.destroy', $post->id) }}">
+          @csrf
+        </form>
+      @endif
     </div>
   </header>
 
@@ -96,22 +99,24 @@
   @endif
 
   <script>
-    const deletePostButton = document.querySelector("#delete-post-button");
-    const deleteModal = document.querySelector("#delete-modal");
-    const canceldeleteButton = document.querySelector("#cancel-delete-button");
-    const confirmDeleteButton = document.querySelector("#confirm-delete-button");
+    @if($post->id == auth()->id())
+      const deletePostButton = document.querySelector("#delete-post-button");
+      const deleteModal = document.querySelector("#delete-modal");
+      const canceldeleteButton = document.querySelector("#cancel-delete-button");
+      const confirmDeleteButton = document.querySelector("#confirm-delete-button");
 
-    deletePostButton.addEventListener('click', function() {
-      deleteModal.classList.remove("hidden");
-    })
+      deletePostButton.addEventListener('click', function() {
+        deleteModal.classList.remove("hidden");
+      })
 
-    canceldeleteButton.addEventListener('click', function() {
-      deleteModal.classList.add("hidden")
-    })
+      canceldeleteButton.addEventListener('click', function() {
+        deleteModal.classList.add("hidden")
+      })
 
-    confirmDeleteButton.addEventListener('click', function() {
-      document.querySelector('#delete-form').submit()
-    })
+      confirmDeleteButton.addEventListener('click', function() {
+        document.querySelector('#delete-form').submit()
+      })
+    @endif
     
   </script>
   
