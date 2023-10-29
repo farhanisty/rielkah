@@ -4,10 +4,10 @@
 
 <div class="container mt-5 pb-[80px]">
   <header class="mb-3">
-    <a href="{{ $previousUrl }}" class="flex items-center gap-2">
+    <button onClick="history.back()" class="flex items-center gap-2">
       <img src="{{ asset('assets/icons/back.png') }}" width="30" />
       <p class="font-bold capitalize">back</p>
-    </a>
+    </button>
     <div class="flex gap-3 items-center mt-5">
       <div class="rounded-full overflow-hidden w-[30px] h-[30px] flex justify-center items-center">
         <img src="{{ asset('storage/' . $post->profilePicture) }}" width="30" />
