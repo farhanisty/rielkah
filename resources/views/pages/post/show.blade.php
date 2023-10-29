@@ -99,7 +99,7 @@
   @endif
 
   <script>
-    @if($post->id == auth()->id())
+    @if($post->userId == auth()->id())
       const deletePostButton = document.querySelector("#delete-post-button");
       const deleteModal = document.querySelector("#delete-modal");
       const canceldeleteButton = document.querySelector("#cancel-delete-button");
