@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/post', [PostController::class, 'index'])->name('post.index');
     Route::get('/post/{id}', [PostController::class, 'show'])->name('post.show');
     Route::post('/post', [PostController::class, 'create'])->name('post.create');
+    Route::post('/post/destroy/{id}', [PostController::class, 'destroy'])->name('post.destroy');
 
     Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile.show');
 

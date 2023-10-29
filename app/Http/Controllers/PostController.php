@@ -38,4 +38,11 @@ class PostController extends Controller
       'post' => $this->postRepository->getPostWhereId($id),
     ]);
   }
+
+  public function destroy(int $id)
+  {
+    $this->postRepository->deletePostWhereId($id);
+
+    return redirect()->route('profile.index')->with('notification', 'success delete post');
+  }
 }

@@ -95,6 +95,11 @@ class EloquentPostRepository implements PostRepository
 
     return $posts;
   }
+  
+  public function deletePostWhereId(int $id): void
+  {
+    Post::where('id', '=', $id)->delete();
+  }
 
   private function queryCountComments()
   {
