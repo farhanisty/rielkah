@@ -30,7 +30,7 @@ class PostController extends Controller
     
     $this->postRepository->createPost(auth()->id(), $image ,$validated['description'], now());
 
-    return redirect()->route('profile.index');
+    return redirect()->route('profile.index')->with('notification', 'success create post');
   }
 
   public function show(int $id)
