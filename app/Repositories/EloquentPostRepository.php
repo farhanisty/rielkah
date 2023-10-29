@@ -82,14 +82,17 @@ class EloquentPostRepository implements PostRepository
 
   public function getPostsWhereUsername(string $username): Collection
   {
-    $userPosts = User::select('username', 'profile_picture', DB::raw('posts.id, posts.caption, posts.created_at, posts.image'))
+    $userPosts = User::select('username', 'profile_picture', DB::raw('posts.id, posts.caption, posts.created_at, posts.image, comments.count_comments'))
       ->join('posts', 'users.id', '=', 'posts.user_id')
+      ->leftJoinSub($this->queryCountComments(), 'comments', function($join) {
+        $join->on('posts.id', '=', 'comments.post_id');
+      })
       ->where('users.username', '=', $username)
       ->orderByRaw('posts.created_at desc')
       ->get();
 
     $posts = $userPosts->map(function($post, int $key) {
-      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, 0, Carbon::parse($post->created_at)->diffForHumans());
+      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, $post->count_comments ?? 0, Carbon::parse($post->created_at)->diffForHumans());
     });
 
 
