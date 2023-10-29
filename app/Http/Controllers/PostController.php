@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CreatePostRequest;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -41,8 +42,16 @@ class PostController extends Controller
 
   public function destroy(int $id)
   {
-    $this->postRepository->deletePostWhereId($id);
+    try{
+      $post = $this->postRepository->getPostWhereId($id);
+      
+      Storage::delete($post->image);
+      
+      $this->postRepository->deletePostWhereId($id);
 
-    return redirect()->route('profile.index')->with('notification', 'success delete post');
+      return redirect()->route('profile.index')->with('notification', 'success delete post');
+    }catch(Exception $e) {
+      return redirect()->back()->with('notification', $e->getMessage());
+    }
   }
 }
