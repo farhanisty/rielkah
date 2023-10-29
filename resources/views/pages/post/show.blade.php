@@ -91,7 +91,7 @@
 
 @push('script')
 
-  @if(session('status') || $errors->any())
+  @if(session('notification') || $errors->any())
     <script src="{{ asset('js/notificationMaker.js') }}"></script>
   @endif
 
