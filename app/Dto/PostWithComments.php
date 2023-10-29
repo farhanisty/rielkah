@@ -10,6 +10,7 @@ class PostWithcomments extends PostDto
   public function __construct(
     string $id,
     string $username,
+    string $userId,
     ?string $profilePicture,
     string $image,
     string $caption,
@@ -17,7 +18,7 @@ class PostWithcomments extends PostDto
     string $createdAt,
     Collection $comments
   ) { 
-    parent::__construct($id, $username, $profilePicture, $image, $caption, $countComments, $createdAt);
+    parent::__construct($id, $username, $userId, $profilePicture, $image, $caption, $countComments, $createdAt);
     $this->comments = $comments;
   }
 }

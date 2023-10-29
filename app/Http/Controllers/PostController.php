@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CreatePostRequest;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class PostController extends Controller
     
     $this->postRepository->createPost(auth()->id(), $image ,$validated['description'], now());
 
-    return redirect()->route('profile.index');
+    return redirect()->route('profile.index')->with('notification', 'success create post');
   }
 
   public function show(int $id)
@@ -37,5 +38,20 @@ class PostController extends Controller
     return view('pages/post/show',[
       'post' => $this->postRepository->getPostWhereId($id),
     ]);
+  }
+
+  public function destroy(int $id)
+  {
+    try{
+      $post = $this->postRepository->getPostWhereId($id);
+      
+      Storage::delete($post->image);
+      
+      $this->postRepository->deletePostWhereId($id);
+
+      return redirect()->route('profile.index')->with('notification', 'success delete post');
+    }catch(Exception $e) {
+      return redirect()->back()->with('notification', $e->getMessage());
+    }
   }
 }

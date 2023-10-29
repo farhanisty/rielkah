@@ -18,6 +18,16 @@
 @endsection
 
 @section('pusher')
+  @if(session('notification'))
+
+    @php
+      $notificationDescription = session('notification')
+    @endphp
+    
+    @include('components/notification')
+
+  @endif
+
 <div id="logout-modal" class="fixed w-screen h-screen bg-black bg-opacity-20 top-0 hidden">
   <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-20">
     <div class="bg-white md:max-w-[250px] py-5 px-5 rounded-md md:mx-auto">
@@ -32,7 +42,14 @@
 @endsection
 
 @push('script') 
+
+  @if(session('notification') || $errors->any())
+    <script src="{{ asset('js/notificationMaker.js') }}"></script>
+  @endif
+  
   <script>
+
+
     const logoutButton = document.querySelector("#logout-button");
     const logoutModal = document.querySelector("#logout-modal");
     const cancelLogoutButton = document.querySelector("#cancel-logout-button");

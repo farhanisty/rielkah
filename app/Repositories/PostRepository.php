@@ -16,4 +16,6 @@ interface PostRepository
   public function getPostsWhereUsername(string $username): Collection;
 
   public function getPostsWhereFollowed(int $id): Collection;
+
+  public function deletePostWhereId(int $id): void;
 }

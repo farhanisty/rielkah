@@ -7,6 +7,7 @@ class PostDto
   public function __construct(
     public string $id,
     public string $username,
+    public string $userId,
     public ?string $profilePicture,
     public string $image,
     public string $caption,
