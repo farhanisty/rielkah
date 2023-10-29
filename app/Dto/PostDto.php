@@ -10,6 +10,7 @@ class PostDto
     public ?string $profilePicture,
     public string $image,
     public string $caption,
+    public int $countComments,
     public string $createdAt
   ) { }
 }
