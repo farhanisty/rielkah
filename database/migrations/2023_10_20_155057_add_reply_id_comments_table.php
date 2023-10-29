@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('comments', function(Blueprint $table) {
             $table->unsignedBigInteger('reply_id')->nullable();
-            $table->foreign('reply_id')->references('id')->on('comments');
+            $table->foreign('reply_id')->references('id')->on('comments')->onDelete('cascade');
         });
     }
 
