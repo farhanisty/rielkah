@@ -8,6 +8,7 @@ use App\Repositories\PostRepository;
 use App\Repositories\CommentRepository;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\FollowManagement;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -31,16 +32,19 @@ class EloquentPostRepository implements PostRepository
   
   public function getPostsWhereFollowed(int $id): Collection
   {
-    $results = FollowManagement::select('posts.id', 'caption', 'posts.created_at', 'image', DB::raw('users.username, users.profile_picture'))
+    $results = FollowManagement::select('posts.id', 'caption', 'posts.created_at', 'image', DB::raw('users.username, users.profile_picture, comments.count_comments'))
       ->join('posts', 'posts.user_id', '=', 'follow_management.followed_id')
       ->join('users', 'posts.user_id', '=', 'users.id')
+      ->leftJoinSub($this->queryCountComments(), 'comments', function($join) {
+        $join->on('posts.id', '=', 'comments.post_id');
+      })
       ->where('follow_management.user_id', '=', $id)
       ->orderByRaw('posts.created_at desc')
       ->limit(50)
       ->get();
 
     $posts = $results->map(function($post, int $key){
-      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans());
+      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, $post->count_comments ?? 0, Carbon::parse($post->created_at)->diffForHumans());
     });
 
     return collect($posts);
@@ -55,19 +59,22 @@ class EloquentPostRepository implements PostRepository
 
     $comments = $this->commentRepository->getCommentsWherePostId($id);
 
-    return new PostWithComments($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans(), $comments);
+    return new PostWithComments($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, count($comments), Carbon::parse($post->created_at)->diffForHumans(), $comments);
   }
 
   public function getPostsWhereUserId(int $id): Collection
   {
-    $userPosts = User::select('username', 'profile_picture', DB::raw('posts.id, posts.caption, posts.created_at, posts.image'))
+    $userPosts = User::select('username', 'profile_picture', DB::raw('posts.id, posts.caption, posts.created_at, posts.image, comments.count_comments'))
       ->join('posts', 'users.id', '=', 'posts.user_id')
+      ->leftJoinSub($this->queryCountComments(), 'comments', function($join) {
+        $join->on('posts.id', '=', 'comments.post_id');
+      })
       ->where('users.id', '=', $id)
       ->orderByRaw('posts.created_at desc')
       ->get();
 
     $posts = $userPosts->map(function($post, int $key) {
-      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans());
+      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, $post->count_comments ?? 0, Carbon::parse($post->created_at)->diffForHumans());
     });
 
     return $posts;
@@ -82,10 +89,16 @@ class EloquentPostRepository implements PostRepository
       ->get();
 
     $posts = $userPosts->map(function($post, int $key) {
-      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, Carbon::parse($post->created_at)->diffForHumans());
+      return new PostDto($post->id, $post->username, $post->profile_picture, $post->image, $post->caption, 0, Carbon::parse($post->created_at)->diffForHumans());
     });
 
 
     return $posts;
+  }
+
+  private function queryCountComments()
+  {
+    return Comment::select('post_id', DB::raw('count(*) count_comments'))
+      ->groupBy('post_id');
   }
 }
