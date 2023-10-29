@@ -8,7 +8,7 @@ class Comment
     public string $id,
     public string $userId,
     public string $postId,
-    public string $profilePicture,
+    public ?string $profilePicture,
     public string $username,
     public string $description,
     public string $createdAt,

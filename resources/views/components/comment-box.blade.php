@@ -1,6 +1,6 @@
 <div class="text-sm py-3 flex items-center border-b last:border-0">
   <div class="rounded-full overflow-hidden w-[30px] h-[30px] flex justify-center items-center">
-    <img src="{{ asset('storage/' . $comment->profilePicture) }}" />
+    <img src="{{ asset($comment->profilePicture ?'storage/' . $comment->profilePicture : 'assets/no-profile.svg') }}" />
   </div>
   <div class="w-full pl-3">
     <div class="flex w-full justify-between">
