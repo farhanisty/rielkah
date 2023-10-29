@@ -13,11 +13,11 @@ class PostWithcomments extends PostDto
     ?string $profilePicture,
     string $image,
     string $caption,
+    int $countComments,
     string $createdAt,
     Collection $comments
   ) { 
-    parent::__construct($id, $username, $profilePicture, $image, $caption, $createdAt);
-
+    parent::__construct($id, $username, $profilePicture, $image, $caption, $countComments, $createdAt);
     $this->comments = $comments;
   }
 }

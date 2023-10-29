@@ -35,7 +35,6 @@ class PostController extends Controller
   public function show(int $id)
   {
     return view('pages/post/show',[
-      'previousUrl' => url()->previous(),
       'post' => $this->postRepository->getPostWhereId($id),
     ]);
   }

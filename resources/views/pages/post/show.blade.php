@@ -4,10 +4,10 @@
 
 <div class="container mt-5 pb-[80px]">
   <header class="mb-3">
-    <a href="{{ $previousUrl }}" class="flex items-center gap-2">
+    <button onClick="history.back()" class="flex items-center gap-2">
       <img src="{{ asset('assets/icons/back.png') }}" width="30" />
       <p class="font-bold capitalize">back</p>
-    </a>
+    </button>
     <div class="flex gap-3 items-center mt-5">
       <div class="rounded-full overflow-hidden w-[30px] h-[30px] flex justify-center items-center">
         <img src="{{ asset('storage/' . $post->profilePicture) }}" width="30" />
@@ -59,22 +59,16 @@
 @if(session('status') || $errors->any())
 @section('pusher')
 
-<div id="notification" class="fixed top-[20px] w-full flex justify-center duration-500" >
-  <div class="{{ $errors->any() ? 'bg-red-300' : 'bg-green-300' }} max-w-[250px] rounded-full py-2 px-5">
-    <p class="font-bold text-center capitalize text-white text-sm">{{ session('status') ?? $errors->first('description') }}</p>
-  </div>
-</div>
+  @php
+    $notificationDescription = session('status') ?? $errors->first('username')
+  @endphp
+  
+  @include('components/notification')
 
 @endsection
 
 @push('script')
-<script>
-setTimeout(() => {
-  const notification = document.getElementById('notification');
-
-  notification.classList.add('-translate-y-[100px]');
-}, 3000)
-</script>
+  <script src="{{ asset('js/notificationMaker.js') }}"></script>
 @endpush
 
 @endif

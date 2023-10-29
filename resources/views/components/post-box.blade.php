@@ -14,6 +14,9 @@
     <section class="px-2 text-sm">
       <time class="inline-block font-light mb-3">{{ $post->createdAt }}</time>
       <p><span class="font-semibold mr-1 text-md">{{ $post->username }}</span>{{ $post->caption }}</p>
+      <p class="mt-2 text-slate-500">{{  $post->countComments }} comments</p>
+      <a href="{{ route('post.show', $post->id) }}" class="inline-block mt-2 text-slate-400 underline">see more</a>
     </section>
+
   </main>
 </article>
