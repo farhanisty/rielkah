@@ -173,6 +173,7 @@ return [
         App\Providers\AccountServiceProvider::class,
         App\Providers\CommentRepositoryProvider::class,
         App\Providers\PostRepositoryProvider::class,
+        App\Providers\NotificationRepositoryProvider::class
     ])->toArray(),
 
     /*
