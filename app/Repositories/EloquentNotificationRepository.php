@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\DB;
 
 class EloquentNotificationRepository implements NotificationRepository
 {
-    public function createNotification(int $userId, string $link, string $type, string $createdAt, string $updatedAt, string $friendId): void
+    public function createNotification(int $userId, string $link, string $type, string $createdAt, ?string $updatedAt, string $friendId): void
     {
-        Post::insert([
+        Notification::insert([
             'user_id' => $userId,
             'link' => $link,
             'type' => $type,
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
-            'friendId' => $friendId
+            'friend_id' => $friendId
           ]);
     }
 
