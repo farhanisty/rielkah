@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\DB;
 
 class EloquentNotificationRepository implements NotificationRepository
 {
+    public function createNotification(int $userId, string $link, string $type, string $createdAt, string $updatedAt, string $friendId): void
+    {
+        Post::insert([
+            'user_id' => $userId,
+            'link' => $link,
+            'type' => $type,
+            'created_at' => $createdAt,
+            'updated_at' => $updatedAt,
+            'friendId' => $friendId
+          ]);
+    }
+
     public function getNotificationsWhereUserId(int $id): Collection
     {
         $notifications = Notification::select(DB::raw('notifications.id, notifications.user_id, notifications.friend_id, users.username, users.profile_picture, notifications.link, notifications.type, notifications.created_at, notifications.updated_at'))
