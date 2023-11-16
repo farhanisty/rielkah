@@ -12,9 +12,11 @@ class ActivityController extends Controller
     ) {}
   public function index()
   {
-    dd($this->notificationRepository->getNotificationsWhereUserId(1));
+    $notifications = $this->notificationRepository->getNotificationsWhereUserId(auth()->id());
+
     return view('pages.activity', [
-      'page' => 'activity'
+      'page' => 'activity',
+      'notifications' => $notifications
     ]);
   }
 }
