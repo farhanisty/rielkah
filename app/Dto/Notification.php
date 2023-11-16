@@ -9,10 +9,10 @@ class Notification
         public string $userId,
         public string $friendId,
         public string $friendName,
-        public string $friendProfile,
+        public ?string $friendProfile,
         public string $link,
-        public int $type,
+        public string $type,
         public string $createdAt,
-        public string $updatedAt
+        public ?string $updatedAt
     ) {}
 }
